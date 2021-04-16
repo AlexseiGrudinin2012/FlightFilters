@@ -1,27 +1,26 @@
-/*
+import com.gridnine.testing.filters.ArrivalDateLessDepartureDateFilter;
+import com.gridnine.testing.filters.DepartureTimeBeforeNow;
 import com.gridnine.testing.filters.FiltersImplement;
+import com.gridnine.testing.filters.FlightForParkingWithTimeAFilter;
 import com.gridnine.testing.flight.Flight;
 import com.gridnine.testing.flight.Segment;
 import junit.framework.TestCase;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
-public class testFlightBuilder extends TestCase {
 
 
-    private Filters filter;
+public class testFiltersClass extends TestCase {
 
+
+    List<Flight> flightList = new ArrayList<>();
 
     @Override
     public void setUp() {
 
-        List<Flight> flightList = new ArrayList<>();
+
         List<Segment> segments = new ArrayList<>();
         LocalDateTime dateTime = LocalDateTime.of(2020, 12, 31, 12, 12, 59);
         LocalDateTime now = LocalDateTime.now();
@@ -53,7 +52,6 @@ public class testFlightBuilder extends TestCase {
         segments.add(new Segment(dateTime.plusHours(4).minusMinutes(29), dateTime.plusHours(5)));
         segments.add(new Segment(dateTime.plusHours(6).minusMinutes(30), dateTime.plusHours(7)));
         flightList.add(new Flight(new ArrayList<>(segments), 5));
-        filter = new Filters(flightList);
     }
 
     private List<String> getAllDatesForActualTests(List<Flight> actualFlightList) {
@@ -75,15 +73,34 @@ public class testFlightBuilder extends TestCase {
         return actual;
     }
 
+
     @Test
-    public void testGetDepartureTimeBeforeNow() //фильтр по времени ранее чем сейчас
-    {
-        var dumpFilter = filter.getDepartureTimeBeforeNow();
-        var actual = getAllDatesForActualTests(dumpFilter);
+    public void testArrivalDateLessDepartyreDateFilter() {
+
+        var results =
+                new ArrivalDateLessDepartureDateFilter(flightList);
+        var actual = getAllDatesForActualTests(results.checkDump());
+        results.showFilterListResult("тест 1");
         List<String> expected = new ArrayList<>();
 
-        FiltersImplement.showAllFlight(dumpFilter, "GetDepartureTimeBeforeNow TEST");
+        expected.add("2020-12-31T12:12:59");
+        expected.add("2020-12-31T14:12:59");
+        expected.add("2020-12-31T09:12:59");
+        expected.add("2020-12-31T16:12:59");
+        expected.add("2020-12-31T12:12:59");
+        expected.add("2020-12-31T19:12:59");
 
+        assertEquals(expected, actual);
+    }
+
+    public void testDepartureTimeBeforeNow() {
+
+        var results =
+                new DepartureTimeBeforeNow(flightList);
+
+        var actual = getAllDatesForActualTests(results.checkDump());
+        results.showFilterListResult("тест 2");
+        List<String> expected = new ArrayList<>();
         expected.add("2020-12-31T12:12:59");
         expected.add("2020-12-31T14:12:59");
         expected.add("2020-12-31T09:12:59");
@@ -104,40 +121,15 @@ public class testFlightBuilder extends TestCase {
         expected.add("2020-12-31T19:12:59");
 
         assertEquals(expected, actual);
-
     }
 
-    @Test
-    public void testGetArrivalDateLessDepartureDate() // самолет не вылетел, но уже приземлился
-    {
-        var dumpFilter = filter.getArrivalDateLessDepartureDate();
-        var actual = getAllDatesForActualTests(dumpFilter);
+    public void testFlightForParkingWithTimeAFilterTest1() {
+
+        var results =
+                new FlightForParkingWithTimeAFilter(flightList);
+        var actual = getAllDatesForActualTests(results.checkDump());
+        results.showFilterListResult("тест 3");
         List<String> expected = new ArrayList<>();
-
-        FiltersImplement.showAllFlight(dumpFilter, "GetArrivalDateLessDepartureDate TEST");
-
-        expected.add("2020-12-31T12:12:59");
-        expected.add("2020-12-31T14:12:59");
-        expected.add("2020-12-31T09:12:59");
-        expected.add("2020-12-31T16:12:59");
-        expected.add("2020-12-31T12:12:59");
-        expected.add("2020-12-31T19:12:59");
-
-        assertEquals(expected, actual);
-
-    }
-
-    @Test
-    public void testGetFlightWithTransferMoreThanTwoHours() //простаивание более 2х часов
-    {
-
-        var dumpFilter = filter.getFlightWithTransferMoreThanTwoHours();
-        var actual = getAllDatesForActualTests(dumpFilter);
-        List<String> expected = new ArrayList<>();
-
-        FiltersImplement.showAllFlight(dumpFilter, "GetFlightWithTransferMoreThanTwoHours TEST");
-
-
         expected.add("2020-12-31T12:12:59");
         expected.add("2020-12-31T13:12:59");
         expected.add("2020-12-31T14:12");
@@ -147,9 +139,20 @@ public class testFlightBuilder extends TestCase {
         expected.add("2020-12-31T17:42:59");
         expected.add("2020-12-31T19:12:59");
         assertEquals(expected, actual);
-
     }
+
+    public void testFlightForParkingWithTimeAFilterTest2() {
+
+        var results =
+                new FlightForParkingWithTimeAFilter(flightList);
+
+        results.setHour(3);
+        var actual = results.checkDump();
+
+        results.showFilterListResult("тест 4");
+        assertNull(actual);
+    }
+
 
 }
 
-*/

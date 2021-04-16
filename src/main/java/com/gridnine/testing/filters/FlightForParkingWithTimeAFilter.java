@@ -5,6 +5,7 @@ import com.gridnine.testing.flight.Segment;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 public class FlightForParkingWithTimeAFilter extends Filter {
@@ -59,7 +60,7 @@ public class FlightForParkingWithTimeAFilter extends Filter {
                 }
         );
 
-        return getResult();
+        return getResult().isEmpty()? null:getResult();
     }
 
 
