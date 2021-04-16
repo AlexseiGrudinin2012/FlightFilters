@@ -1,7 +1,6 @@
 package com.gridnine.testing;
 
-import com.gridnine.testing.filters.Filters;
-import com.gridnine.testing.filters.FiltersImplement;
+import com.gridnine.testing.filters.*;
 import com.gridnine.testing.flight.Flight;
 import com.gridnine.testing.flight.FlightBuilder;
 
@@ -9,18 +8,37 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
         List<Flight> flights = FlightBuilder.createFlights();
-        Filters filters = new Filters(flights);
+        demonstrationToOneClass(flights, ArrivalDateLessDepartureDateFilter.class, "Дата вылета позже чем дата прилета");
+        demonstrationToOneClass(flights, DepartureTimeBeforeNow.class, "Вылет до текущего времени");
+        demonstrationToOneClass(flights, FlightForParkingWithTimeAFilter.class, "Общее время стоянки - 2 часа");
 
-        var filter1 = filters.getDepartureTimeBeforeNow();
-        var filter2 = filters.getArrivalDateLessDepartureDate();
-        var filter3 = filters.getFlightWithTransferMoreThanTwoHours();
+        demonstrationAnyClass(flights);
+        //or
 
-        FiltersImplement.showAllFlight(filter1, "Вылет до текущего времени");
-        FiltersImplement.showAllFlight(filter2, "Дата приземления раньше чем дата вылета");
-        FiltersImplement.showAllFlight(filter3, "общее время нахождения на земле более 2-х часов");
+        FiltersImplement filtersImplement = new FlightForParkingWithTimeAFilter(flights, 3);
+        filtersImplement.showList(filtersImplement.checkDump());
 
+    }
+
+
+    public static <T> void demonstrationToOneClass(List<Flight> flightList, Class<T> clazz, String title) {
+        DumpFilters dumpFilters = new DumpFilters(flightList);
+        var filter = dumpFilters.getFilter(clazz);
+        filter.checkDump();
+        filter.showFilterListResult(title);
+    }
+
+    public static void demonstrationAnyClass(List<Flight> flightList) {
+        DumpFilters dumpFilters = new DumpFilters(flightList);
+
+        dumpFilters.getFiltersImplementList().forEach(
+                imp ->
+                {
+                    imp.checkDump();
+                    imp.showFilterListResult();
+                }
+        );
 
     }
 }

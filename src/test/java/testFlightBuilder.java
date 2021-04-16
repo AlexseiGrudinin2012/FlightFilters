@@ -1,4 +1,4 @@
-import com.gridnine.testing.filters.Filters;
+/*
 import com.gridnine.testing.filters.FiltersImplement;
 import com.gridnine.testing.flight.Flight;
 import com.gridnine.testing.flight.Segment;
@@ -152,3 +152,4 @@ public class testFlightBuilder extends TestCase {
 
 }
 
+*/
