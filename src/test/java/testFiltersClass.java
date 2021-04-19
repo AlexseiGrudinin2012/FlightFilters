@@ -146,10 +146,10 @@ public class testFiltersClass extends TestCase {
                 new FlightForParkingWithTimeAFilter(flightList);
 
         results.setHour(3);
-        var actual = results.checkDump();
+        var actual = results.checkDump().size();
 
         results.showFilterListResult("тест 4");
-        assertNull(actual);
+        assertEquals(0,actual);
     }
 
 
