@@ -1,5 +1,6 @@
 package com.gridnine.testing.filters;
 
+import com.gridnine.testing.filters.parents.FiltersImplement;
 import com.gridnine.testing.flight.Flight;
 
 import java.util.ArrayList;
@@ -32,7 +33,9 @@ public class DumpFilters {
     public <T> FiltersImplement getFilter(Class<T> clazz) {
 
         return filtersImplementList.stream()
-                .filter(filter -> clazz.isAssignableFrom(filter.getClass())).findFirst().orElse(null);
+                .filter(filter -> clazz.isAssignableFrom(filter.getClass()))
+                .findFirst()
+                .orElse(null);
     }
 
 

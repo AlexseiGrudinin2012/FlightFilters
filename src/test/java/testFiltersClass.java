@@ -1,6 +1,5 @@
 import com.gridnine.testing.filters.ArrivalDateLessDepartureDateFilter;
 import com.gridnine.testing.filters.DepartureTimeBeforeNow;
-import com.gridnine.testing.filters.FiltersImplement;
 import com.gridnine.testing.filters.FlightForParkingWithTimeAFilter;
 import com.gridnine.testing.flight.Flight;
 import com.gridnine.testing.flight.Segment;
